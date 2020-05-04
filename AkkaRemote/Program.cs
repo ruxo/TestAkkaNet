@@ -22,23 +22,42 @@ namespace AkkaRemote
             var config = ConfigurationFactory.ParseString(File.ReadAllText("app.conf")).WithFallback(portConfig);
 
             using var system = ActorSystem.Create("remote-example", config);
-            system.ActorOf(Props.Create(() => new EchoService()), "echo");
 
-            Console.WriteLine("ENTER to start connect!");
-            Console.ReadLine();
+            IActorRef? echo = null;
+            var quit = false;
+            while (!quit) {
+                switch (Menu()) {
+                    case '1':
+                        echo = system.ActorOf(Props.Create(() => new EchoService()), "echo");
+                        break;
 
-            var otherEcho = system.ActorSelection($"akka.tcp://remote-example@localhost:{theirPort}/user/echo");
+                    case '2':
+                        var remoteAddress = Address.Parse($"akka.tcp://remote-example@localhost:{theirPort}");
+                        echo = system.ActorOf(Props.Create(() => new EchoService())
+                                                   .WithDeploy(Deploy.None.WithScope(new RemoteScope(remoteAddress))),
+                                              "echo");
+                        break;
 
-            Console.WriteLine("Start!");
+                    case '3':
+                        Console.Write("Input: ");
+                        echo?.Tell(Console.ReadLine());
+                        break;
 
-            var input = "Hi!";
-
-            do {
-                otherEcho.Tell(input);
-                input = Console.ReadLine();
-            } while (!string.IsNullOrEmpty(input));
-
+                    case 'Q':
+                        quit = true;
+                        break;
+                }
+            }
             Console.WriteLine("End..");
+        }
+
+        static char Menu() {
+            Console.WriteLine("Choose:");
+            Console.WriteLine("1) Run Echo locally");
+            Console.WriteLine("2) Run Echo on remote");
+            Console.WriteLine("3) Send text to Echo");
+            Console.WriteLine("Q) Quit");
+            return Console.ReadKey().KeyChar;
         }
     }
 }
