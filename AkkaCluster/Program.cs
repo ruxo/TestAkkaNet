@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Akka.Actor;
+using Akka.Cluster.Tools.Singleton;
 using Akka.Configuration;
 using Akka.Routing;
 
@@ -45,6 +46,22 @@ namespace AkkaCluster
 
             var broadcaster = system.ActorOf(Props.Empty.WithRouter(FromConfig.Instance), "broadcaster");
 
+
+            #region Echo singleton service example
+
+            system.ActorOf(ClusterSingletonManager.Props(
+                                                         singletonProps: Props.Create<EchoService>(),
+                                                         terminationMessage: PoisonPill.Instance,
+                                                         settings: ClusterSingletonManagerSettings.Create(system)
+                                                        ), "echo-single");
+
+            var echoSingleton = new Lazy<IActorRef>(() =>
+                system.ActorOf(ClusterSingletonProxy.Props(singletonManagerPath: "/user/echo-single",
+                                                           settings: ClusterSingletonProxySettings.Create(system)),
+                "echo-proxy"));
+
+            #endregion
+
             var quit = false;
             IActorRef echo = ActorRefs.Nobody;
             while (!quit) {
@@ -64,12 +81,16 @@ namespace AkkaCluster
                         broadcaster.Tell(Console.ReadLine());
                         break;
 
+                    case '4':
+                        Console.Write("To singleton: ");
+                        echoSingleton.Value.Tell(Console.ReadLine());
+                        break;
+
                     case 'Q':
                         quit = true;
                         break;
                 }
             }
-
             await CoordinatedShutdown.Get(system).Run(CoordinatedShutdown.ClusterLeavingReason.Instance);
 
             Console.WriteLine("End..");
@@ -80,6 +101,8 @@ namespace AkkaCluster
             Console.WriteLine("1) Run Echo in every instance");
             Console.WriteLine("2) Send text to Echo");
             Console.WriteLine("3) Broadcast text to Echo");
+            Console.WriteLine("4) Send message to the Echo singleton");
+
             Console.WriteLine("Q) Quit");
             return char.ToUpper(Console.ReadKey().KeyChar);
         }
