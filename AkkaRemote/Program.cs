@@ -29,6 +29,7 @@ namespace AkkaRemote
                 switch (Menu()) {
                     case '1':
                         echo = system.ActorOf(Props.Create(() => new EchoService()), "echo");
+                        Console.WriteLine("Echo service is created locally.");
                         break;
 
                     case '2':
@@ -36,6 +37,7 @@ namespace AkkaRemote
                         echo = system.ActorOf(Props.Create(() => new EchoService())
                                                    .WithDeploy(Deploy.None.WithScope(new RemoteScope(remoteAddress))),
                                               "echo");
+                        Console.WriteLine("Echo service is created on a remote machine.");
                         break;
 
                     case '3':
