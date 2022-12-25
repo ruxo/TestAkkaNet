@@ -11,6 +11,7 @@ namespace AkkaSingle
             Console.WriteLine("Choose an example:");
             Console.WriteLine("1. Simple Setup");
             Console.WriteLine("2. Exception Handling");
+            Console.WriteLine("3. ReceiveActor with state");
             Console.Write("> ");
             var choice = Console.ReadKey().KeyChar;
             Console.WriteLine();
@@ -20,6 +21,9 @@ namespace AkkaSingle
                     break;
                 case '2':
                     ExceptionHandling.Example(ActorSystem);
+                    break;
+                case '3':
+                    ReceiveActorWithState.Example(ActorSystem);
                     break;
             }
             ActorSystem.WhenTerminated.Wait();

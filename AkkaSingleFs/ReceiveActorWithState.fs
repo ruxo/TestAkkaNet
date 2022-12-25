@@ -3,13 +3,13 @@
 open System
 open Akka.Actor
 
-type Messages =
-    | Hello of string
-    | Swap
+type Hello = Hello of string
+type Swap = Swap
 
 type TestActor() as this =
     inherit ReceiveActor()
 
+    // First pain point, cannot use auto-property. F# auto-property is in-compatible.
     let mutable stash: IStash = null
 
     do this.Normal()
@@ -19,21 +19,23 @@ type TestActor() as this =
             with get () = stash
             and set v = stash <- v
 
-    // First pain point, to use protected member from lambda, it needs a bridge..
-    member _.Become x = base.Become(x: Action)
+    // Second, to use protected member from lambda, it needs a bridge..
+    member _.Become f = base.Become(Action(f))
 
     member this.Normal() =
-        this.Receive<Messages> (function
-            | Hello s -> printfn $"Hi %s{s}!"
-            | Swap -> this.Become(Action(this.Ghost)))
+        this.Receive<Hello> (function
+            | Hello s -> printfn $"Hi %s{s}!")
+
+        this.Receive<Swap>(fun _ -> this.Become(this.Ghost))
 
     member this.Ghost() =
-        this.Receive<Messages> (function
-            // Second pain point, call self implementation of interface is tricky!
-            | Hello _ -> (this :> IWithUnboundedStash).Stash.Stash()
-            | Swap ->
-                this.Become(Action(this.Normal))
-                stash.UnstashAll())
+        this.Receive<Hello> (function
+            // Third pain point, call self implementation of interface is tricky!
+            | Hello _ -> (this :> IWithUnboundedStash).Stash.Stash())
+
+        this.Receive<Swap>(fun _ ->
+            this.Become(this.Normal)
+            stash.UnstashAll())
 
 let Example (actor_system: ActorSystem) =
     let a = actor_system.ActorOf(Props.Create<TestActor>(), "test-actor")
