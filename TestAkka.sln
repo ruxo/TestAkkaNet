@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AkkaRemote", "AkkaRemote\Ak
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AkkaCluster", "AkkaCluster\AkkaCluster.csproj", "{11954D2B-E21B-4D29-9ED5-4A0040FFBF95}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "AkkaSingleFs", "AkkaSingleFs\AkkaSingleFs.fsproj", "{A57A954F-5753-4BD7-8782-02C40B5BC2D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{11954D2B-E21B-4D29-9ED5-4A0040FFBF95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11954D2B-E21B-4D29-9ED5-4A0040FFBF95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11954D2B-E21B-4D29-9ED5-4A0040FFBF95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A57A954F-5753-4BD7-8782-02C40B5BC2D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A57A954F-5753-4BD7-8782-02C40B5BC2D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A57A954F-5753-4BD7-8782-02C40B5BC2D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A57A954F-5753-4BD7-8782-02C40B5BC2D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,4 +1,5 @@
-﻿using Akka.Actor;
+﻿using System;
+using Akka.Actor;
 
 namespace AkkaSingle
 {
@@ -7,10 +8,22 @@ namespace AkkaSingle
         static readonly ActorSystem ActorSystem = ActorSystem.Create("SingleActor");
 
         static void Main() {
-            //SimpleSetup.Example(ActorSystem);
-            ExceptionHandling.Example(ActorSystem);
-
+            Console.WriteLine("Choose an example:");
+            Console.WriteLine("1. Simple Setup");
+            Console.WriteLine("2. Exception Handling");
+            Console.Write("> ");
+            var choice = Console.ReadKey().KeyChar;
+            Console.WriteLine();
+            switch (choice) {
+                case '1':
+                    SimpleSetup.Example(ActorSystem);
+                    break;
+                case '2':
+                    ExceptionHandling.Example(ActorSystem);
+                    break;
+            }
             ActorSystem.WhenTerminated.Wait();
+            Console.WriteLine("End.");
         }
     }
 }

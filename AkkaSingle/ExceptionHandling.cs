@@ -18,7 +18,7 @@ namespace AkkaSingle
             new OneForOneStrategy(maxNrOfRetries: 3, withinTimeMilliseconds: 1000,
               ex => {
                   var isHead = r.Next(2) == 0;
-                  Console.WriteLine("Coin is {0}", isHead? "head, restart!" : "tail, stop!");
+                  Console.WriteLine("Coin is {0}", isHead? "head, restart!" : "tail, stop! Press ENTER to end.");
                   return isHead? Directive.Restart : Directive.Stop;
               });
     }
@@ -42,7 +42,7 @@ namespace AkkaSingle
         }
 
         protected override void PostRestart(Exception reason) {
-            Console.WriteLine("Restarted!");
+            Console.WriteLine($"Restarted! Reason = {reason.Message}");
             Self.Tell("restarted!");
         }
     }
