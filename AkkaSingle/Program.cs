@@ -9,7 +9,7 @@ namespace AkkaSingle
         static void Main() {
             Console.WriteLine("Choose an example:");
             Console.WriteLine("1. Simple Setup");
-            Console.WriteLine("2. Exception Handling");
+            Console.WriteLine("2. Exception Handling with Supervisor Strategy");
             Console.WriteLine("3. ReceiveActor with state");
             Console.Write("> ");
             var choice = Console.ReadKey().KeyChar;

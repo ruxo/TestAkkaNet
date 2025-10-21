@@ -10,7 +10,7 @@ type TestActor() as this =
     inherit ReceiveActor()
 
     // First pain point, cannot use auto-property. F# auto-property is in-compatible.
-    let mutable stash: IStash = null
+    let mutable stash: IStash = Unchecked.defaultof<IStash>
 
     do this.Normal()
 

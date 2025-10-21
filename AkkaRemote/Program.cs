@@ -45,6 +45,7 @@ namespace AkkaRemote
 
                     case 'Q':
                         quit = true;
+                        CoordinatedShutdown.Get(system).Run(CoordinatedShutdown.ClrExitReason.Instance);
                         break;
                 }
             }
