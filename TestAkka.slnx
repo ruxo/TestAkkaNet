@@ -1,0 +1,11 @@
+﻿<Solution>
+  <Folder Name="/Misc/">
+    <File Path=".gitignore" />
+    <File Path="README.adoc" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Project Path="AkkaCluster\AkkaCluster.csproj" Type="Classic C#" />
+  <Project Path="AkkaRemote\AkkaRemote.csproj" Type="Classic C#" />
+  <Project Path="AkkaSingleFs\AkkaSingleFs.fsproj" Type="Classic F#" />
+  <Project Path="AkkaSingle\AkkaSingle.csproj" Type="Classic C#" />
+</Solution>
